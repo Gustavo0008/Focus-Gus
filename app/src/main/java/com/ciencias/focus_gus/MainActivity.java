@@ -1,5 +1,5 @@
 /*
-@author Gustavo Angel Ortíz Vásquez
+@author Gustavo Angel Ortíz Vásquez y Adamari Gianina Lopez Cortes
  */
 
 package com.ciencias.focus_gus;
