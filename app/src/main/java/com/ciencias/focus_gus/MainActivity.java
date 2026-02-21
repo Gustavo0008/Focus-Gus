@@ -1,3 +1,7 @@
+/*
+@author Gustavo Angel Ortíz Vásquez
+ */
+
 package com.ciencias.focus_gus;
 
 import android.os.Bundle;
