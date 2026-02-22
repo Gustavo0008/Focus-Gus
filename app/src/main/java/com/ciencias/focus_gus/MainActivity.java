@@ -1,5 +1,5 @@
 /*
-@author Gustavo Angel Ortíz Vásquez y Adamari Gianina Lopez Cortes
+@author Gustavo Angel Ortíz Vásquez y Adamari Gianina Lopez Cortes, conflicto
  */
 
 package com.ciencias.focus_gus;
