@@ -1,5 +1,5 @@
 /*
-author Gustavo Angel Ortiz Vasquez
+@author <a href=gustavo008@ciecias.unam.mx> Gustavo Angel Ortiz Vasquez - @Gustavo0008 </a>
  */
 
 package com.ciencias.focus_gus;
