@@ -1,7 +1,3 @@
-/*
-@author Gustavo Angel Ortíz Vásquez y Adamari Gianina Lopez Cortes
- */
-
 package com.ciencias.focus_gus;
 
 import android.os.Bundle;
@@ -11,10 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
-/**
- * holaaaaa
- */
 
 public class MainActivity extends AppCompatActivity {
 
