@@ -65,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
     private int focusSessionsCompleted = 0;
 
     /**
-     * TODO: Documentar.
      *
-     * @param savedInstanceState ...
+     * Inicializa la actividad junto con todos sus componentes
+     * @param savedInstanceState Estado guardado de la aplicación
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +85,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: Documentar.
-     * TODO: cancelar el temporizador para evitar desbordes de memoria.
+     * Destruye la actividad.
+     * Se cancela el temporizador para evitar fugas de memoria y liberar recursos
      */
     @Override
     protected void onDestroy() {
@@ -96,11 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * TODO: Documentar.
-     * TODO: inicializar el texto que indica el estado de la sesion.
-     * TODO: inicializar el texto que indica cuantas sesiones han sido completadas.
-     * TODO: inicializar los botones de reinicio y salto de una sesion.
-     * TODO: inicializar el texto para la frase motivadora.
+     * Vincula las variables con los identificadores definidos en la interfaz
      */
     private void bindViews() {
         btnStats = findViewById(R.id.btnStats);
@@ -117,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: Documentar.
+     * Asigna los clics a los botones definidos en la interfaz
      */
     private void setupClickListeners() {
         // Asignamos un escucha al boton que controla nuestro temporizador.
@@ -137,7 +133,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: Documentar.
+     * Inicia el temporizador con el tiempo restante actual.
+     * Se actualiza la interfaz y se cambia de estado
      */
     private void startTimer() {
         // Actualizamos el estado del temporizador.
@@ -145,14 +142,13 @@ public class MainActivity extends AppCompatActivity {
         // Asignamos una texto mas adecuado al boton que controla nuestro temporizador.
         btnStartStop.setText("Pausar");
 
-        // PRUEBA
-        // addDot();
 
         // Creamos e inicializamos un contador.
         countDownTimer = new CountDownTimer(timeLeftMillis, 1000) {
+
             /**
-             * TODO: Documentar.
-             * @param millisUntilFinished ...
+             * Actualiza la vista del temporizador
+             * @param millisUntilFinished Milisegundos restantes
              */
             @Override
             public void onTick(long millisUntilFinished) {
@@ -161,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             /**
-             * TODO: Documentar.
+             * Notifica que el tiempo se ha terminado
              */
             @Override
             public void onFinish() {
@@ -171,7 +167,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: Documentar.
+     * Se detiene el temporizador guardando el tiempo restante.
+     * Se cambia de estado y se actualiza el boton
      */
     private void pauseTimer() {
         // Detenemos nuestro contador.
@@ -183,9 +180,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: Documentar.
-     * TODO: reiniciar el contenedor de puntos o agregar un nuevo punto en el layout.
-     * TODO: actualizar el texto que indica el numero de sesiones de enfoque completadas.
+     * Gestiona el cambio en el modo de la sesión.
+     * Se generan los puntos dependiendo del número de sesiones.
+     * Se notifica el usuario el fin de una sesión
      */
     private void onSessionFinished() {
         // Actualizamos el estado de nuestro temporizador.
@@ -212,8 +209,7 @@ public class MainActivity extends AppCompatActivity {
 
         // solicitamos al servicio del sistema que genere una vibracion simple
         // para notificar al usuario que la sesion a terminado.
-        // PERMISOS NECESARIOS EN EL MANIFIESTO:
-        // <uses-permission android:name="android.permission.VIBRATE" />
+
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (v != null) {
             // Vibra por 500 milisegundos
@@ -225,7 +221,9 @@ public class MainActivity extends AppCompatActivity {
         btnStartStop.setText("Comenzar");
     }
 
-    // Actualizamos el numero de puntos
+    /**
+    * Se dibujan la cantidad de sesiones de enfoque terminadas mediante puntos en la interfaz
+    */
     private void updateSessionDots() {
         // Borramos todos los puntos
         sessionDotsContainer.removeAllViews();
@@ -236,6 +234,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Se configura la vista de un punto y se agrega al contenedor
+     */
     private void addDot() {
         // Creamos la vista del punto.
         View dot = new View(this);
@@ -254,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: Documentar.
+     * Restaura el tiempo del temporizador actual
      */
     private void resetModeTime() {
         // Reasignamos la duracion de la sesion segun el estado actual.
@@ -266,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: Documentar.
+     * Detiene de manera segura el temporizador
      */
     private void cancelTimer() {
         // Si el temporizador esta activo:
@@ -279,11 +280,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: Documentar.
-     * TODO: Detener el tiempo, resetear el tiempo del estado actual y actualizar la IU.
+     * Resetea el tiempo del estado actual y actualiza la interfaz
      */
-
-    // Forzar el fin de una sesion
     private void resetTimer() {
 
     cancelTimer();
@@ -294,18 +292,20 @@ public class MainActivity extends AppCompatActivity {
         btnStartStop.setText("COMENZAR");
     }
 
-    // Forzar el fin de una sesion y saltar a otra
+    /**
+     * Se fuerza la finalización de una sesión y salta a la siguiente
+     */
     private void skipToNextSession() {
 
         cancelTimer();
         onSessionFinished();
 
-        /**
-         * TODO: Documentar.
-         * TODO: actualizar el texto que indica el estado de la sesion actual.
-         * @param millis ...
-         */
     }
+
+    /**
+     * Convierte el tiempo de milisegundos a un formato MM:SS
+     * @param millis El tiempo restante en milisegundos
+     */
     private void updateTimerDisplay(long millis) {
         // Resaltamos el chip correspondiente al estado actual del temporizador.
         selectChipForMode(currentMode);
@@ -317,8 +317,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * TODO: Documentar.
-     * @param mode ...
+     * Marca visualmente el modo de la sesión
+     * @param mode Modo de la sesión actual
      */
     private void selectChipForMode(SessionMode mode) {
         // El identificador del chip a seleccionar.
@@ -344,8 +344,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: Documentar.
-     * @param activeChip ...
+     * Personalización de los bordes
+     * @param activeChip El chip del estado actual
      */
     private void highlightChip(Chip activeChip) {
         // Obtenemos la densidad de pantalla necesaria para construir el borde de nuestros chips.
