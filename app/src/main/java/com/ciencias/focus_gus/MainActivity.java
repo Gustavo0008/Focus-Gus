@@ -315,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
         tvTimerDisplay.setText(String.format("%02d:%02d", minutes, seconds));
     }
 
+
     /**
      * TODO: Documentar.
      * @param mode ...
