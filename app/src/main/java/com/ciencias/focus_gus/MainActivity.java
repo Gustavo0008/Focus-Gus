@@ -197,6 +197,9 @@ public class MainActivity extends AppCompatActivity {
             currentMode = SessionMode.FOCUS;
         }
 
+        // Actualizamos los puntos al cambiar de estado
+        updateSessionDots();
+
         // Mostramos un mensaje sencillo al finalizar cada sesion.
         Toast.makeText(this, "¡Sesión terminada!", Toast.LENGTH_SHORT).show();
 
@@ -215,9 +218,17 @@ public class MainActivity extends AppCompatActivity {
         btnStartStop.setText("Comenzar");
     }
 
-    /**
-     * TODO: Documentar.
-     */
+    // Actualizamos el numero de puntos
+    private void updateSessionDots() {
+        // Borramos todos los puntos
+        sessionDotsContainer.removeAllViews();
+
+        // Insertamos los puntos necesarios
+        for (int i = 0; i < focusSessionsCompleted; i++) {
+            addDot();
+        }
+    }
+
     private void addDot() {
         // Creamos la vista del punto.
         View dot = new View(this);
