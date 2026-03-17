@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     // TODO: delcarar los botones de reinicio y salto de una sesion.
     private LinearLayout sessionDotsContainer;
     // TODO: declarar el texto para la frase motivadora.
+
+
     // Elementos para el funcionamiento del temporizador.
     private CountDownTimer countDownTimer;
     private TimerState timerState = TimerState.IDLE;
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        cancelTimer();
     }
 
 

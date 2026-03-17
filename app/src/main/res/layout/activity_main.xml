@@ -46,16 +46,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvTimer"
+        android:id="@+id/tvTimerDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="25:00"
         android:textColor="#FFFFFF"
         android:textSize="64sp"
-        app:layout_constraintBottom_toBottomOf="@id/tvTimerDisplay"
-        app:layout_constraintEnd_toEndOf="@id/tvTimerDisplay"
-        app:layout_constraintStart_toStartOf="@id/tvTimerDisplay"
-        app:layout_constraintTop_toTopOf="@id/tvTimerDisplay"
+        app:layout_constraintBottom_toBottomOf="@id/progressTimer"
+        app:layout_constraintEnd_toEndOf="@id/progressTimer"
+        app:layout_constraintStart_toStartOf="@id/progressTimer"
+        app:layout_constraintTop_toTopOf="@id/progressTimer"
         app:layout_constraintVertical_bias="0.494" />
 
     <TextView
@@ -67,10 +67,10 @@
         android:textColor="#A0A0A0"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/tvTimer"
-        app:layout_constraintEnd_toEndOf="@id/tvTimerDisplay"
+        app:layout_constraintBottom_toTopOf="@id/tvTimerDisplay"
+        app:layout_constraintEnd_toEndOf="@id/progressTimer"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="@id/tvTimerDisplay" />
+        app:layout_constraintStart_toStartOf="@id/progressTimer" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chipGroupMode"
@@ -114,7 +114,7 @@
 
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/tvTimerDisplay"
+        android:id="@+id/progressTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_lg"
@@ -151,7 +151,7 @@
         app:cornerRadius="@dimen/btn_corner_radius"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTimerDisplay" />
+        app:layout_constraintTop_toBottomOf="@id/progressTimer" />
 
     <ImageButton
         android:id="@+id/btnSkip"
