@@ -32,20 +32,20 @@ import com.google.android.material.chip.ChipGroup;
 public class MainActivity extends AppCompatActivity {
 
 
-
     // Estados del temporizador y sesion.
-    enum TimerState { IDLE, RUNNING, PAUSED }
-    enum SessionMode { FOCUS, BREAK, REST}
+    enum TimerState {IDLE, RUNNING, PAUSED}
+
+    enum SessionMode {FOCUS, BREAK, REST}
 
     // Constantes de tiempo en milisegundos.
-    private static final long FOCUS_DURATION_MS   = 25 * 60 * 1000L;
-    private static final long BREAK_DURATION_MS   =  5 * 60 * 1000L;
-    private static final long REST_DURATION_MS    = 15 * 60 * 1000L;
+    private static final long FOCUS_DURATION_MS = 25 * 60 * 1000L;
+    private static final long BREAK_DURATION_MS = 5 * 60 * 1000L;
+    private static final long REST_DURATION_MS = 15 * 60 * 1000L;
     private static final int SESSIONS_BEFORE_REST = 4;
 
     // Elementos de la IU.
     private TextView tvAppTittle;
-    private ImageButton btnStats, btnSettings;
+    private ImageButton btnStats, btnSettings, btnReset, btnSkip;
     private ChipGroup chipGroupMode;
     private Chip chipFocus, chipBreak, chipRest;
     // TODO: delcarar el texto que indica el estado de la sesion.
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * TODO: Documentar.
+     *
      * @param savedInstanceState ...
      */
     @Override
@@ -111,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
         tvTimerDisplay = findViewById(R.id.tvTimerDisplay);
         btnStartStop = findViewById(R.id.btnStartStop);
         sessionDotsContainer = findViewById(R.id.sessionDotsContainer);
+        btnReset = findViewById(R.id.btnReset);
+        btnSkip = findViewById(R.id.btnSkip);
     }
 
     /**
@@ -124,6 +127,10 @@ public class MainActivity extends AppCompatActivity {
             if (timerState == TimerState.RUNNING) pauseTimer();
             else startTimer();
         });
+
+        // Botones de reiniciar y saltar
+        btnReset.setOnClickListener(v -> resetTimer());
+        btnSkip.setOnClickListener(v -> skipToNextSession());
 
         btnStats.setOnClickListener(null);
         btnSettings.setOnClickListener(null);
@@ -275,19 +282,30 @@ public class MainActivity extends AppCompatActivity {
      * TODO: Documentar.
      * TODO: Detener el tiempo, resetear el tiempo del estado actual y actualizar la IU.
      */
-    private void resetTimer() { }
 
-    /**
-     * TODO: Documentar.
-     * TODO: Cancelar el tiempo y forzar el fin de la sesion para saltar el estado actual.
-     */
-    private void skipToNextSession() { }
+    // Forzar el fin de una sesion
+    private void resetTimer() {
 
-    /**
-     * TODO: Documentar.
-     * TODO: actualizar el texto que indica el estado de la sesion actual.
-     * @param millis ...
-     */
+    cancelTimer();
+    timerState =TimerState.IDLE;
+
+    // Reiniciar el texto del botón
+    resetModeTime();
+        btnStartStop.setText("COMENZAR");
+    }
+
+    // Forzar el fin de una sesion y saltar a otra
+    private void skipToNextSession() {
+
+        cancelTimer();
+        onSessionFinished();
+
+        /**
+         * TODO: Documentar.
+         * TODO: actualizar el texto que indica el estado de la sesion actual.
+         * @param millis ...
+         */
+    }
     private void updateTimerDisplay(long millis) {
         // Resaltamos el chip correspondiente al estado actual del temporizador.
         selectChipForMode(currentMode);
