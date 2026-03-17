@@ -5,15 +5,205 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#2E2C2A"
+    android:paddingHorizontal="@dimen/screen_padding_horizontal"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+
+    <ImageButton
+        android:id="@+id/btnStats"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/spacing_lg"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_stats"
+        app:tint="#A0A0A0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAppTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="POMODORO TIMER"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/app_title_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/btnSettings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnSettings" />
+
+    <ImageButton
+        android:id="@+id/btnSettings"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/spacing_lg"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_settings"
+        app:tint="#A0A0A0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="25:00"
+        android:textColor="#FFFFFF"
+        android:textSize="64sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvTimerDisplay"
+        app:layout_constraintEnd_toEndOf="@id/tvTimerDisplay"
+        app:layout_constraintStart_toStartOf="@id/tvTimerDisplay"
+        app:layout_constraintTop_toTopOf="@id/tvTimerDisplay"
+        app:layout_constraintVertical_bias="0.494" />
+
+    <TextView
+        android:id="@+id/tvSessionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="FOCUS SESSION"
+        android:textColor="#A0A0A0"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tvTimer"
+        app:layout_constraintEnd_toEndOf="@id/tvTimerDisplay"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@id/tvTimerDisplay" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupMode"
+        android:layout_width="192dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="24dp"
+        app:chipSpacingHorizontal="@dimen/chip_spacing"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvAppTitle"
+        app:selectionRequired="true"
+        app:singleLine="true"
+        app:singleSelection="true">
+
+
+        <com.google.android.material.chip.Chip
+
+            android:id="@+id/chipBreak"
+            style="@style/Widget.FocusApp.Chip.Mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Break" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipFocus"
+            style="@style/Widget.FocusApp.Chip.Mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Focus" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipRest"
+            style="@style/Widget.FocusApp.Chip.Mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rest" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/tvTimerDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_lg"
+        android:progress="100"
+        app:indicatorColor="@color/color_primary"
+        app:indicatorSize="260dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chipGroupMode"
+        app:trackColor="#3A3836"
+        app:trackThickness="6dp" />
+
+    <ImageButton
+        android:id="@+id/btnReset"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="12dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_replay"
+        app:layout_constraintBottom_toBottomOf="@id/btnStartStop"
+        app:layout_constraintEnd_toStartOf="@id/btnStartStop"
+        app:layout_constraintTop_toTopOf="@id/btnStartStop"
+        app:tint="#A0A0A0" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnStartStop"
+        android:layout_width="@dimen/btn_primary_width"
+        android:layout_height="@dimen/btn_primary_height"
+        android:layout_marginTop="@dimen/spacing_lg"
+        android:text="START"
+        android:textColor="#000000"
+        android:textSize="@dimen/btn_text_size"
+        app:backgroundTint="@color/color_primary"
+        app:cornerRadius="@dimen/btn_corner_radius"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTimerDisplay" />
+
+    <ImageButton
+        android:id="@+id/btnSkip"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_skip"
+        app:layout_constraintBottom_toBottomOf="@id/btnStartStop"
+        app:layout_constraintStart_toEndOf="@id/btnStartStop"
+        app:layout_constraintTop_toTopOf="@id/btnStartStop"
+        app:tint="#A0A0A0" />
+
+    <LinearLayout
+        android:id="@+id/sessionDotsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_lg"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnStartStop">
+
+        <ImageView
+            android:id="@+id/dot1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:src="@drawable/dot_session_completed" />
+
+        <ImageView
+            android:id="@+id/dot2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:src="@drawable/dot_session_completed" />
+
+        <ImageView
+            android:id="@+id/dot3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:src="@drawable/dot_session_completed" />
+
+        <ImageView
+            android:id="@+id/dot4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:src="@drawable/dot_session_completed" />
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
