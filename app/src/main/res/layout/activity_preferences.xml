@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:navigationIconTint="@color/color_primary"
-        app:title="@string/title_preferences" />
+        app:title="@string/title_preferences"/>
 
     <View
         android:layout_width="match_parent"
