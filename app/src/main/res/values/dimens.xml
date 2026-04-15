@@ -9,6 +9,8 @@
     <dimen name="btn_primary_width">200dp</dimen>
     <dimen name="btn_corner_radius">28dp</dimen>
 
+    <dimen name="spacing_xs"> 4dp </dimen>
+    <dimen name="spacing_sm"> 8dp </dimen>
     <dimen name="spacing_md">16dp</dimen>
     <dimen name="spacing_lg">24dp</dimen>
     <dimen name="screen_padding_horizontal">24dp</dimen>

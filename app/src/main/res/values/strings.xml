@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Focus-Gus</string>
+
+    <string name="title_preferences">Preferences</string>
+
+    <string name="theme_preference_key" translatable="false"> java.com.ciencias.focus_gus.THEME_PREFERENCE_KEY</string>
+    <string name="lang_preference_key" translatable="false"> java.com.ciencias.focus_gus.LANG_PREFERENCE_KEY</string>
+    <string name="theme_light_id" translatable="false">light</string>
+    <string name="theme_dark_id" translatable="false">dark</string>
 </resources>
