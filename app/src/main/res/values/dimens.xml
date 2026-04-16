@@ -14,6 +14,7 @@
     <dimen name="spacing_sm"> 8dp </dimen>
     <dimen name="spacing_md">16dp</dimen>
     <dimen name="spacing_lg">24dp</dimen>
+    <dimen name="spacing_xl"> 32dp </dimen>
     <dimen name="screen_padding_horizontal">24dp</dimen>
 
     <dimen name="chip_group_margin_top">24dp</dimen>
