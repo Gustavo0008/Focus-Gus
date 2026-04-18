@@ -72,7 +72,7 @@ public class SessionManager extends SQLiteOpenHelper {
 
         // Insertamos la fila
         db.insert(TABLE_SESSIONS, null, values);
-        db.close(); // Siempre cierra la conexión para evitar fugas de memoria
+
     }
 
 
@@ -97,19 +97,25 @@ public class SessionManager extends SQLiteOpenHelper {
     public List<Session> getAllSessions() {
         List<Session> sessionList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
 
         // Consultamos toda la tabla, ordenando por ID descendente (dejando la sesión más reciente primero)
-        Cursor cursor = db.query(TABLE_SESSIONS, null, null, null, null, null, COLUMN_ID + " DESC");
-
-        if (cursor.moveToFirst()) {
-            do {
-                sessionList.add(extractSessionFromCursor(cursor));
-            } while (cursor.moveToNext());
+        try {
+            cursor = db.query(TABLE_SESSIONS, null, null, null, null, null, COLUMN_ID + " DESC");
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    sessionList.add(extractSessionFromCursor(cursor));
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            // Se ejecuta SIEMPRE, previniendo fugas de memoria
+            if (cursor != null) {
+                cursor.close();
+            }
         }
-        cursor.close();
-        db.close();
         return sessionList;
     }
+
 
 
     /**
@@ -119,24 +125,26 @@ public class SessionManager extends SQLiteOpenHelper {
     public List<Session> getSessionsToday() {
         List<Session> sessionList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
 
         // Se define el formato y obtenemos la fecha
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
         String today = sdf.format(new java.util.Date());
 
         String selection = COLUMN_DATE + " = ?";
-        String[] selectionArgs = { today };
+        String[] selectionArgs = {today};
 
         // Consultamos toda la tabla, ordenando por ID descendente (dejando la sesión más reciente primero)
-        Cursor cursor = db.query(TABLE_SESSIONS, null, selection, selectionArgs, null, null, COLUMN_ID + " DESC");
-
-        if (cursor.moveToFirst()) {
-            do {
-                sessionList.add(extractSessionFromCursor(cursor));
-            } while (cursor.moveToNext());
+        try {
+            cursor = db.query(TABLE_SESSIONS, null, selection, selectionArgs, null, null, COLUMN_ID + " DESC");
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    sessionList.add(extractSessionFromCursor(cursor));
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) cursor.close();
         }
-        cursor.close();
-        db.close();
         return sessionList;
     }
 
@@ -147,6 +155,7 @@ public class SessionManager extends SQLiteOpenHelper {
     public List<Session> getSessionsThisWeek() {
         List<Session> sessionList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
 
         // Calculamos el inicio y fin de la semana actual
 
@@ -170,17 +179,18 @@ public class SessionManager extends SQLiteOpenHelper {
         String[] selectionArgs = { startOfWeek, endOfWeek };
 
         // Consultamos toda la tabla, ordenando por ID descendente (dejando la sesión más reciente primero)
-        Cursor cursor = db.query(TABLE_SESSIONS, null, selection, selectionArgs, null, null, COLUMN_ID + " DESC");
-
-        if (cursor.moveToFirst()) {
-            do {
-                sessionList.add(extractSessionFromCursor(cursor));
-            } while (cursor.moveToNext());
+            try {
+                cursor = db.query(TABLE_SESSIONS, null, selection, selectionArgs, null, null, COLUMN_ID + " DESC");
+                if (cursor != null && cursor.moveToFirst()) {
+                    do {
+                        sessionList.add(extractSessionFromCursor(cursor));
+                    } while (cursor.moveToNext());
+                }
+            } finally {
+                if (cursor != null) cursor.close();
+            }
+            return sessionList;
         }
-        cursor.close();
-        db.close();
-        return sessionList;
-    }
 
 
     /**
@@ -198,5 +208,16 @@ public class SessionManager extends SQLiteOpenHelper {
         onCreate(db);
 
         Log.d("SQLite", "Base de datos actualizada de la versión " + oldVersion + " a la " + newVersion);
+    }
+
+    /**
+     * Elimina todos los registros de la tabla de sesiones.
+     * Se utiliza para limpiar el historial del usuario
+     */
+    public void deleteAllSessions() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Borramos todas las filas de la tabla
+        db.delete(TABLE_SESSIONS, null, null);
+
     }
 }

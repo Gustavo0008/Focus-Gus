@@ -27,7 +27,7 @@ public class SessionHistoryAdapter extends RecyclerView.Adapter<SessionHistoryAd
      * Actúa como un contenedor que evita llamadas repetitivas a findViewById.
      */
     class SessionViewHolder extends RecyclerView.ViewHolder {
-        // Referencias a los elementos gráficos definidos en history_session_entry.xml.
+        // Referencias a los elementos gráficos definidos en history_session_entry.xml
         private TextView tvSessionType, tvSessionDate, tvSessionTime, tvSessionDuration;
         private Chip chipStatus;
 
@@ -46,7 +46,7 @@ public class SessionHistoryAdapter extends RecyclerView.Adapter<SessionHistoryAd
         }
     }
 
-    // Estructura de datos que contiene la información a mostrar (Dataset).
+    // Estructura de datos que contiene la información a mostrar
     private final List<Session> DATASET;
     // Referencia a recursos para obtener colores y dimensiones dinámicamente.
     private final Resources RESOURCES;
@@ -62,7 +62,7 @@ public class SessionHistoryAdapter extends RecyclerView.Adapter<SessionHistoryAd
     }
 
     /**
-     * Metodo encargado de "inflar" (crear) el layout XML para cada entrada de la lista.
+     * Metodo encargado para crear el layout XML para cada entrada de la lista.
      * Se llama solo cuando el RecyclerView necesita crear un nuevo ViewHolder.
      */
     @NonNull
@@ -113,5 +113,17 @@ public class SessionHistoryAdapter extends RecyclerView.Adapter<SessionHistoryAd
     @Override
     public int getItemCount() {
         return DATASET.size();
+    }
+
+    /**
+     * Actualiza el conjunto de datos del adaptador y notifica a la vista
+     * @param newSessions La nueva lista de sesiones filtradas.
+     */
+    public void updateData(List<Session> newSessions) {
+        this.DATASET.clear();
+        if (newSessions != null) {
+            this.DATASET.addAll(newSessions);
+        }
+        notifyDataSetChanged();
     }
 }

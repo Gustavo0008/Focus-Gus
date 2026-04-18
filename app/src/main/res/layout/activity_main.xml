@@ -5,104 +5,137 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2E2C2A"
+    android:background="@color/bg_main"
     android:paddingHorizontal="@dimen/screen_padding_horizontal"
     tools:context=".MainActivity">
 
+    <!-- Historial -->
 
     <ImageButton
         android:id="@+id/btnStats"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/btn_secondary_height"
+        android:layout_height="@dimen/btn_secondary_height"
         android:layout_marginTop="@dimen/spacing_lg"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_stats"
-        app:tint="#A0A0A0"
+        app:tint="@color/text_secondary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Barra superior -->
     <TextView
         android:id="@+id/tvAppTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="POMODORO TIMER"
-        android:textColor="#FFFFFF"
+        android:layout_marginHorizontal="16dp"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="@string/app_title"
+        android:textColor="@color/white"
         android:textSize="@dimen/app_title_size"
         android:textStyle="bold"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="14sp"
+        app:autoSizeMaxTextSize="20sp"
+
         app:layout_constraintBottom_toBottomOf="@id/btnSettings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnSettings"
+        app:layout_constraintStart_toEndOf="@id/btnStats"
         app:layout_constraintTop_toTopOf="@id/btnSettings" />
 
+    <!-- Ajustes -->
     <ImageButton
         android:id="@+id/btnSettings"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/btn_secondary_height"
+        android:layout_height="@dimen/btn_secondary_height"
         android:layout_marginTop="@dimen/spacing_lg"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_settings"
-        app:tint="#A0A0A0"
+        app:tint="@color/text_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Reloj -->
     <TextView
         android:id="@+id/tvTimerDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="25:00"
-        android:textColor="#FFFFFF"
-        android:textSize="64sp"
+        android:text="@string/timer_default_time"
+        android:textColor="@color/white"
+        android:textSize="@dimen/timer_text_size_large"
         app:layout_constraintBottom_toBottomOf="@id/progressTimer"
         app:layout_constraintEnd_toEndOf="@id/progressTimer"
         app:layout_constraintStart_toStartOf="@id/progressTimer"
         app:layout_constraintTop_toTopOf="@id/progressTimer"
         app:layout_constraintVertical_bias="0.494" />
 
+
+    <!-- Modo de sesion -->
     <TextView
-        android:id="@+id/tvSessionLabel"
+        android:id="@+id/tvSessionStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:text="FOCUS SESSION"
-        android:textColor="#A0A0A0"
-        android:textSize="12sp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/session_focus_label"
+        android:textColor="@color/text_secondary"
+        android:textSize="@dimen/caption_text_size"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/tvTimerDisplay"
         app:layout_constraintEnd_toEndOf="@id/progressTimer"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="@id/progressTimer" />
 
+
+    <!-- Contador de sesiones -->
+
+    <TextView
+        android:id="@+id/tvSessionCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/text_secondary"
+        android:textSize="@dimen/quote_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTimerDisplay"
+        tools:text="0 sessions completed" />
+
+    <!-- Botones superiores -->
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chipGroupMode"
-        android:layout_width="192dp"
-        android:layout_height="57dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_lg"
         app:chipSpacingHorizontal="@dimen/chip_spacing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvAppTitle"
+        app:layout_constraintBottom_toTopOf="@+id/progressTimer"
         app:selectionRequired="true"
         app:singleLine="true"
         app:singleSelection="true">
 
-
+        <!-- Break -->
         <com.google.android.material.chip.Chip
 
             android:id="@+id/chipBreak"
             style="@style/Widget.FocusApp.Chip.Mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Break" />
+            android:text="@string/mode_break" />
 
+        <!-- Focus-->
         <com.google.android.material.chip.Chip
             android:id="@+id/chipFocus"
             style="@style/Widget.FocusApp.Chip.Mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Focus" />
-
+            android:text="@string/mode_focus" />
+        <!-- Rest -->
         <com.google.android.material.chip.Chip
             android:id="@+id/chipRest"
             style="@style/Widget.FocusApp.Chip.Mode"
@@ -112,6 +145,7 @@
 
     </com.google.android.material.chip.ChipGroup>
 
+    <!--  Circulo  -->
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressTimer"
@@ -120,32 +154,36 @@
         android:layout_marginTop="@dimen/spacing_lg"
         android:progress="100"
         app:indicatorColor="@color/color_primary"
-        app:indicatorSize="260dp"
+        app:indicatorSize="@dimen/progress_size"
+        app:layout_constraintBottom_toTopOf="@id/btnStartStop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/chipGroupMode"
-        app:trackColor="#3A3836"
-        app:trackThickness="6dp" />
+        app:trackColor="@color/progress_track"
+        app:trackThickness="@dimen/progress_thickness" />
+
+    <!-- Reset -->
 
     <ImageButton
         android:id="@+id/btnReset"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="12dp"
+        android:layout_width="@dimen/btn_secondary_height"
+        android:layout_height="@dimen/btn_secondary_height"
+        android:layout_marginEnd="@dimen/spacing_sm_md"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_replay"
         app:layout_constraintBottom_toBottomOf="@id/btnStartStop"
         app:layout_constraintEnd_toStartOf="@id/btnStartStop"
         app:layout_constraintTop_toTopOf="@id/btnStartStop"
-        app:tint="#A0A0A0" />
+        app:tint="@color/text_secondary" />
 
+    <!-- Start -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnStartStop"
         android:layout_width="@dimen/btn_primary_width"
         android:layout_height="@dimen/btn_primary_height"
         android:layout_marginTop="@dimen/spacing_lg"
-        android:text="START"
-        android:textColor="#000000"
+        android:text="@string/btn_start"
+        android:textColor="@color/black"
         android:textSize="@dimen/btn_text_size"
         app:backgroundTint="@color/color_primary"
         app:cornerRadius="@dimen/btn_corner_radius"
@@ -153,18 +191,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progressTimer" />
 
+    <!--  Skip  -->
     <ImageButton
         android:id="@+id/btnSkip"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="4dp"
+        android:layout_width="@dimen/btn_secondary_height"
+        android:layout_height="@dimen/btn_secondary_height"
+        android:layout_marginStart="@dimen/spacing_xs"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_skip"
         app:layout_constraintBottom_toBottomOf="@id/btnStartStop"
         app:layout_constraintStart_toEndOf="@id/btnStartStop"
         app:layout_constraintTop_toTopOf="@id/btnStartStop"
-        app:tint="#A0A0A0" />
+        app:tint="@color/text_secondary" />
 
+    <!--  Contador de sesiones  -->
     <LinearLayout
         android:id="@+id/sessionDotsContainer"
         android:layout_width="wrap_content"
@@ -173,11 +213,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnStartStop">
-
-
-
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@id/btnStartStop" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

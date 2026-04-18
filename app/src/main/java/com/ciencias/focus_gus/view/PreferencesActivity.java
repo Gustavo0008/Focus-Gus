@@ -13,7 +13,7 @@ import com.ciencias.focus_gus.R;
 
 /**
  * Actividad encargada de gestionar las preferencias del usuario.
- * Implementa un Listener para reaccionar a cambios en los ajustes (como el idioma).
+ * Implementa un Listener para reaccionar a cambios en los ajustes
  */
 public class PreferencesActivity extends AppCompatActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -53,7 +53,7 @@ public class PreferencesActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        // Desregistramos para evitar fugas de memoria.
+        // Quitar registro para evitar fugas de memoria.
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
 

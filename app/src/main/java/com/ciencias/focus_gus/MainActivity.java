@@ -25,9 +25,17 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.ciencias.focus_gus.model.Session;
+import com.ciencias.focus_gus.model.SessionManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,18 +51,28 @@ public class MainActivity extends AppCompatActivity {
     private static final long REST_DURATION_MS = 15 * 60 * 1000L;
     private static final int SESSIONS_BEFORE_REST = 4;
 
+    // Elementos para el registro de una sesión.
+    private Session newSession;
+    private SessionManager sessionManager;
+    private boolean currentSessionIsCompleted = true;
+
+
+
     // Elementos de la IU.
+
     private TextView tvAppTittle;
     private ImageButton btnStats, btnSettings, btnReset, btnSkip;
     private ChipGroup chipGroupMode;
     private Chip chipFocus, chipBreak, chipRest;
-    // TODO: delcarar el texto que indica el estado de la sesion.
-    private TextView tvTimerDisplay;
-    // TODO: delcarar el texto que indica cuantas sesiones han sido completadas.
     private MaterialButton btnStartStop;
-    // TODO: delcarar los botones de reinicio y salto de una sesion.
     private LinearLayout sessionDotsContainer;
-    // TODO: declarar el texto para la frase motivadora.
+
+    private TextView tvTimerDisplay;
+    private TextView tvSessionStatus;
+    private TextView tvSessionCount;
+    private TextView tvMotivation;
+
+
 
 
     // Elementos para el funcionamiento del temporizador.
@@ -64,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
     private long timeLeftMillis = FOCUS_DURATION_MS;
     private int focusSessionsCompleted = 0;
 
+    private final ExecutorService databaseExecutor = Executors.newSingleThreadExecutor();
+
+
     /**
      *
      * Inicializa la actividad junto con todos sus componentes
@@ -72,12 +93,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Leer preferencias guardadas antes de dibujar la pantalla
+        android.content.SharedPreferences prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Leemos el tema
+        String themeValue = prefs.getString(getString(R.string.theme_preference_key), "system");
+
+        // Aplicamos el tema
+        if ("light".equals(themeValue)) {
+            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
+        } else if ("dark".equals(themeValue)) {
+            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
         EdgeToEdge.enable(this);
         // Inflamos nuestra vista.
         setContentView(R.layout.activity_main);
 
         // Inicializamos los elementos de la IU.
         bindViews();
+        // Llamamos al controlador.
+        sessionManager = new SessionManager(this);
         // Asignamos los escuchas.
         setupClickListeners();
         // Actualizamos la IU.
@@ -110,6 +147,9 @@ public class MainActivity extends AppCompatActivity {
         sessionDotsContainer = findViewById(R.id.sessionDotsContainer);
         btnReset = findViewById(R.id.btnReset);
         btnSkip = findViewById(R.id.btnSkip);
+        tvSessionStatus = findViewById(R.id.tvSessionStatus);
+        tvSessionCount = findViewById(R.id.tvSessionCount);
+
     }
 
     /**
@@ -118,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupClickListeners() {
         // Asignamos un escucha al boton que controla nuestro temporizador.
         btnStartStop.setOnClickListener(v -> {
-            // Se ha seleccionado la opcion para comenzar/pausar el temporizador.
+
             // Llamamos a los metodos correspondientes segun el estado del temporizador.
             if (timerState == TimerState.RUNNING) pauseTimer();
             else startTimer();
@@ -128,8 +168,19 @@ public class MainActivity extends AppCompatActivity {
         btnReset.setOnClickListener(v -> resetTimer());
         btnSkip.setOnClickListener(v -> skipToNextSession());
 
-        btnStats.setOnClickListener(null);
-        btnSettings.setOnClickListener(null);
+        // Boton de historial
+        btnStats.setOnClickListener(v -> {
+            // Cambiar de la pantalla original al historial
+            android.content.Intent intent = new android.content.Intent(MainActivity.this, com.ciencias.focus_gus.view.SessionHistoryActivity.class);
+            startActivity(intent);
+        });
+
+        // Botón de Ajustes
+        btnSettings.setOnClickListener(v -> {
+            // Cambiar de la pantalla original a la de ajustes
+            android.content.Intent intent = new android.content.Intent(MainActivity.this, com.ciencias.focus_gus.view.PreferencesActivity.class);
+            startActivity(intent);
+        });
     }
 
     /**
@@ -140,7 +191,23 @@ public class MainActivity extends AppCompatActivity {
         // Actualizamos el estado del temporizador.
         timerState = TimerState.RUNNING;
         // Asignamos una texto mas adecuado al boton que controla nuestro temporizador.
-        btnStartStop.setText("Pausar");
+        btnStartStop.setText(R.string.btn_pause);
+
+        // Registramos una nueva sesión.
+        newSession = new Session();
+        if (currentMode == SessionMode.FOCUS) {
+            newSession.setType(getString(R.string.mode_focus));
+            newSession.setDuration(25);
+        } else if (currentMode == SessionMode.BREAK) {
+            newSession.setType(getString(R.string.mode_break));
+            newSession.setDuration(5);
+        } else {
+            newSession.setType(getString(R.string.mode_long_break));
+            newSession.setDuration(15);
+        }
+
+        newSession.setDate(new SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault()).format(new Date()));
+        newSession.setDate(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date()));
 
 
         // Creamos e inicializamos un contador.
@@ -176,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
         // Actualizamos el estado de nuestro temporizador.
         timerState = TimerState.PAUSED;
         // Actualizamos el texto del boton que controla el temporizador.
-        btnStartStop.setText("Reanudar");
+        btnStartStop.setText(R.string.btn_resume);
     }
 
     /**
@@ -201,24 +268,29 @@ public class MainActivity extends AppCompatActivity {
             currentMode = SessionMode.FOCUS;
         }
 
+
+        currentSessionIsCompleted = true;
+        newSession.setCompleted(currentSessionIsCompleted);
+
+        // Guardamos en el hilo de fondo
+        databaseExecutor.execute(() -> {
+            sessionManager.saveSession(newSession);
+        });
+
         // Actualizamos los puntos al cambiar de estado
         updateSessionDots();
 
-        // Mostramos un mensaje sencillo al finalizar cada sesion.
-        Toast.makeText(this, "¡Sesión terminada!", Toast.LENGTH_SHORT).show();
-
-        // solicitamos al servicio del sistema que genere una vibracion simple
-        // para notificar al usuario que la sesion a terminado.
+        // Limpieza de texto
+        Toast.makeText(this, "Sesión guardada en el historial", Toast.LENGTH_SHORT).show();
 
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (v != null) {
-            // Vibra por 500 milisegundos
             v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
         }
 
         // Actualizamos el temporizador y el texto del boton que lo controla.
         resetModeTime();
-        btnStartStop.setText("Comenzar");
+        btnStartStop.setText(R.string.btn_start);
     }
 
     /**
@@ -284,12 +356,18 @@ public class MainActivity extends AppCompatActivity {
      */
     private void resetTimer() {
 
-    cancelTimer();
-    timerState =TimerState.IDLE;
+        if (timerState == TimerState.RUNNING && newSession != null) {
+            newSession.setCompleted(false);
+            databaseExecutor.execute(() -> {
+                sessionManager.saveSession(newSession);
+            });
+            Toast.makeText(this, "Sesión interrumpida guardada.", Toast.LENGTH_SHORT).show();
+        }
 
-    // Reiniciar el texto del botón
-    resetModeTime();
-        btnStartStop.setText("COMENZAR");
+        cancelTimer();
+        timerState = TimerState.IDLE;
+        resetModeTime();
+        btnStartStop.setText(R.string.btn_start);
     }
 
     /**
@@ -297,8 +375,40 @@ public class MainActivity extends AppCompatActivity {
      */
     private void skipToNextSession() {
 
+        // Guardamos la sesión como fallida
+        if (timerState == TimerState.RUNNING && newSession != null) {
+            newSession.setCompleted(false);
+            databaseExecutor.execute(() -> {
+                sessionManager.saveSession(newSession);
+            });
+        }
+
         cancelTimer();
-        onSessionFinished();
+
+        // Avanza el ciclo de los puntos
+        if (currentMode == SessionMode.FOCUS) {
+            // Sumamos la sesión al contador visual
+            focusSessionsCompleted++;
+
+            // Evaluamos si toca descanso largo
+            if (focusSessionsCompleted >= SESSIONS_BEFORE_REST) {
+                focusSessionsCompleted = 0; // Limpiamos los puntos
+                currentMode = SessionMode.REST;
+            } else {
+                currentMode = SessionMode.BREAK;
+            }
+        } else {
+            // Regresamos a enfocarnos
+            currentMode = SessionMode.FOCUS;
+        }
+
+        timerState = TimerState.IDLE;
+        resetModeTime();
+
+        // Dibujamos los puntos en la pantalla
+        updateSessionDots();
+
+        btnStartStop.setText(R.string.btn_start);
 
     }
 

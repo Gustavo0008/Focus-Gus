@@ -45,7 +45,6 @@ public class SessionHistoryActivity extends AppCompatActivity {
         bindViews();
         setupToolbar();
         setupRecyclerView();
-        setupFilterLogic();
         updateHistoryDisplay();
     }
 
@@ -68,16 +67,10 @@ public class SessionHistoryActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
     }
 
-    /**
-     * Configuración del sistema de filtrado por temporalidad.
-     */
-    private void setupFilterLogic() {
-        // TODO (Opcional): Implementar el funcionamiento del ChipGroup (filtrado).
-    }
 
     /**
      * Configura la Toolbar como ActionBar de la actividad.
-     * Habilita el botón de retroceso (Up Navigation) y asigna el título
+     * Habilita el botón de retroceso y asigna el título
      * desde los recursos de cadena para soporte multi-idioma.
      */
     private void setupToolbar() {
@@ -108,17 +101,44 @@ public class SessionHistoryActivity extends AppCompatActivity {
      * Gestiona la visibilidad de la UI y actualiza el contador.
      */
     private void updateHistoryDisplay() {
-        // TODO: Recuperar datos reales para el listado de sesiones.
+        // Obtenemos el filtro quiere el usuario
+        int checkedChipId = chipGroupFilter.getCheckedChipId();
 
-        List<Session> sessions = sessionManager.getAllSessions();
-        boolean isEmpty = (sessions == null || sessions.isEmpty());
+        //  Consultar la base de datos
+        java.util.concurrent.Executors.newSingleThreadExecutor().execute(() -> {
 
-        layoutEmpty.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
-        recyclerView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+            // Guardar resultados
+            List<Session> sessions;
 
-        // TODO: Investigar cómo usar Plurals en strings.xml para manejar "1 sesión" vs "2 sesiones".
-        String countText = getString(R.string.session_count, (sessions != null ? sessions.size() : 0));
-        tvResultCount.setText(countText);
+            // Le pedimos al modelo la información
+            if (checkedChipId == R.id.chipToday) {
+                sessions = sessionManager.getSessionsToday();
+            } else if (checkedChipId == R.id.chipWeek) {
+                sessions = sessionManager.getSessionsThisWeek();
+            } else {
+                sessions = sessionManager.getAllSessions();
+            }
+
+            // Volvemos al hilo principal para actualizar la pantalla.
+            runOnUiThread(() -> {
+
+                // Evaluamos si hay datos para mostrar u ocultar la lista
+                boolean isEmpty = (sessions == null || sessions.isEmpty());
+                layoutEmpty.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+                recyclerView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+
+                // Inyectamos los nuevos datos al adaptador para que la lista se redibuje
+                if (adapter != null) {
+                    adapter.updateData(sessions);
+                }
+
+                // Actualizamos el texto con los Plurales
+                int size = sessions != null ? sessions.size() : 0;
+                String countText = getResources().getQuantityString(R.plurals.session_count, size, size);
+                tvResultCount.setText(countText);
+
+            });
+        });
     }
 
     @Override

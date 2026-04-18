@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="bg_main">#2E2C2A</color>
+    <color name="text_secondary">#A0A0A0</color>
     <color name="color_primary">#D6271A</color>
     <color name="color_secondary">#42403E</color>
-    <color name="color_border">#39438E</color>
-    <color name="color_border_accent">#5A398E</color>
+    <color name="progress_track">#5D5B57</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="color_border_accent">#D6271A</color>
+    <color name="color_border">#4A4A4A</color>
+
 </resources>

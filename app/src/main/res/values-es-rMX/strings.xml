@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_title">TEMPORIZADOR POMODORO</string>
+    <string name="session_focus_label">SESIÓN DE ENFOQUE</string>
+
+    <string name="mode_focus">Enfoque</string>
+    <string name="mode_break">Descanso</string>
+    <string name="mode_long_break">Descanso Largo</string>
+
+    <string name="timer_label_focus">Sesión %1$s</string>
+    <string name="sessionsCount">%1$d sesiones completadas</string>
+
+    <string name="btn_start">COMENZAR</string>
+    <string name="btn_pause">PAUSAR</string>
+    <string name="btn_resume">REANUDAR</string>
+    <string name="btn_history">Historial</string>
+    <string name="btn_preferences">Ajustes</string>
+    <string name="btn_reset">Reiniciar</string>
+    <string name="btn_skip">Saltar</string>
+    <string name="title_history"> Historial de sesiones</string>
+
+    <string name="title_preferences">Configuración</string>
+    <string name="history_filter_all">Todo</string>
+    <string name="history_filter_week">Esta Semana</string>
+    <string name="history_filter_today">Hoy</string>
+    <string name="history_empty_title">No hay sesiones registradas</string>
+    <string name="history_empty_desc">¡Inicia tu primera sesión!</string>
+
+    <plurals name="session_count">
+        <item quantity="one">%d sesión</item>
+        <item quantity="other">%d sesiones</item>
+    </plurals>
+</resources>

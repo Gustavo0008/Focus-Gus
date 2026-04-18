@@ -15,14 +15,17 @@
     tools:context=".view.SessionHistoryActivity">
 
     <!-- TOOLBAR -->
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/history_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIconTint="@color/color_primary"
         app:title="@string/title_history"
         app:titleTextColor="@color/color_primary"
-        app:navigationIconTint="@color/color_primary"
-        app:layout_constraintTop_toTopOf="parent"/>
+        tools:layout_editor_absoluteX="0dp" />
 
     <!-- FILTRO DE PERIODO -->
 
@@ -30,8 +33,8 @@
         android:id="@+id/chipGroupFilter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/screen_padding_horizontal"
-        android:layout_marginTop="@dimen/spacing_lg"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="8dp"
         app:chipSpacingHorizontal="@dimen/chip_spacing"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/history_toolbar"
@@ -40,47 +43,50 @@
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chipFilterToday"
+            android:id="@+id/chipAll"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/btn_secondary_height"
+            android:layout_height="wrap_content"
             android:checked="true"
-            android:paddingStart="@dimen/spacing_md"
-            android:paddingEnd="@dimen/spacing_md"
+            android:text="@string/history_filter_all" />
+
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipToday"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/history_filter_today" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chipFilterWeek"
+            android:id="@+id/chipWeek"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/btn_secondary_height"
-            android:paddingStart="@dimen/spacing_md"
-            android:paddingEnd="@dimen/spacing_md"
+            android:layout_height="wrap_content"
             android:text="@string/history_filter_week" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipFilterAll"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/btn_secondary_height"
-            android:paddingStart="@dimen/spacing_md"
-            android:paddingEnd="@dimen/spacing_md"
-            android:text="@string/history_filter_all" />
 
     </com.google.android.material.chip.ChipGroup>
 
+
     <!-- Contador de resultados -->
+
     <TextView
         android:id="@+id/tvResultCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/screen_padding_horizontal"
+        android:layout_marginEnd="16dp"
         android:fontFamily="sans-serif"
         android:textColor="@color/color_border_accent"
         android:textSize="@dimen/quote_text_size"
         app:layout_constraintBottom_toBottomOf="@id/chipGroupFilter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/chipGroupFilter"
+        app:layout_constraintVertical_bias="0.551"
         tools:text="12 sesiones" />
 
     <!-- Divisor decorativo -->
+
     <View
         android:id="@+id/dividerFilter"
         android:layout_width="0dp"
@@ -91,7 +97,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/chipGroupFilter" />
 
-    <!-- ScrollView + LinearLayout -->
     <!-- RECYCLERVIEW -->
 
     <androidx.recyclerview.widget.RecyclerView
